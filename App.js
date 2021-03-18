@@ -20,10 +20,11 @@ export default class App extends Component {
       sexo: 0,
       sexos: [
         { key: 1, sexo: "Masculino" },
-        { key: 1, sexo: "Feminio" },
+        { key: 1, sexo: "Feminino" },
       ],
       valor: 500,
       estudante: false,
+      conta: false,
     };
     this.enviar = this.enviar.bind(this);
   }
@@ -33,17 +34,7 @@ export default class App extends Component {
       alert("Preencha todos os dados ");
       return;
     } else {
-      alert(
-        "Conta feita com sucesso!!!\n\n Nome: " +
-          this.state.nome +
-          "\n\n Idade: " +
-          this.state.idade +
-          "\n\nSexo: " +
-          this.state.sexos[this.state.sexo].sexo +
-          "\n\nLimite do seu saldo :" +
-          this.state.valor.toFixed(2) +
-          (this.state.estudante ? "\n\nEstudante" : "")
-      );
+      this.setState({ conta: true });
     }
   }
 
@@ -53,67 +44,88 @@ export default class App extends Component {
     });
     return (
       <View style={styles.container}>
-        <View style={styles.texto}>
-          <TextInput
-            value={this.state.nome}
-            placeholder="Adicione seu nome"
-            onChangeText={(nome) => this.setState({ nome: nome })}
-            style={styles.campo}
-          />
-          <TextInput
-            value={this.state.idade}
-            placeholder="Adcione sua idade"
-            onChangeText={(idade) => this.setState({ idade: idade })}
-            style={styles.campo}
-          ></TextInput>
-        </View>
-        <View style={styles.pegar}>
-          <Text>Selecione seu sexo:</Text>
-          <Picker
-            selectedValue={this.state.sexo}
-            onValueChange={(itemValue, intemIndex) =>
-              this.setState({ sexo: itemValue })
-            }
-          >
-            {genero}
-          </Picker>
-        </View>
-        <View style={styles.barra}>
-          <Text>Defina o limite para seu saldo</Text>
-          <Slider
-            minimumValue={500}
-            maximumValue={3000}
-            onValueChange={(valor) => this.setState({ valor: valor })}
-            value={this.state.valor}
-            minimumTrackTintColor="blue"
-            maximumTrackTintColor="red"
-          />
-          <Text>
-            Seu limite vai ser:R$ {this.state.valor.toFixed(2)} reais{" "}
-          </Text>
-        </View>
-        <View style={styles.fim}>
-          <Switch
-            value={this.state.estudante}
-            onValueChange={(estudante) =>
-              this.setState({ estudante: estudante })
-            }
-            thumbColor="blue"
-          />
-          <Text>Estudante</Text>
-          <View style={styles.render}>
-            <Text>
-              {this.state.estudante ? "Você selecionou estudante" : ""}
+        {this.state.conta ? (
+          <View style={styles.pronto}>
+            <Text style={styles.editor}>
+              Parabéns conta feita com sucesso!!!
+            </Text>
+            <Text style={styles.editor}>Nome: {this.state.nome}</Text>
+            <Text style={styles.editor}>Idade: {this.state.idade}</Text>
+            <Text style={styles.editor}>
+              Sexo: {this.state.sexos[this.state.sexo].sexo}
+            </Text>
+            <Text style={styles.editor}>
+              Limite do saldo da conta:R$ {this.state.valor.toFixed(2)}
+            </Text>
+            <Text style={styles.editor}>
+              {this.state.estudante ? "Estudante" : ""}
             </Text>
           </View>
-        </View>
-        <View style={styles.botao}>
-          <TouchableOpacity onPress={this.enviar}>
-            <View>
-              <Text>Prosseguir</Text>
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.texto}>
+              <TextInput
+                value={this.state.nome}
+                placeholder="Adicione seu nome"
+                onChangeText={(nome) => this.setState({ nome: nome })}
+                style={styles.campo}
+              />
+              <TextInput
+                value={this.state.idade}
+                placeholder="Adcione sua idade"
+                onChangeText={(idade) => this.setState({ idade: idade })}
+                style={styles.campo}
+              ></TextInput>
             </View>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.pegar}>
+              <Text>Selecione seu sexo:</Text>
+              <Picker
+                selectedValue={this.state.sexo}
+                onValueChange={(itemValue, intemIndex) =>
+                  this.setState({ sexo: itemValue })
+                }
+              >
+                {genero}
+              </Picker>
+            </View>
+            <View style={styles.barra}>
+              <Text>Defina o limite para seu saldo</Text>
+              <Slider
+                minimumValue={500}
+                maximumValue={3000}
+                onValueChange={(valor) => this.setState({ valor: valor })}
+                value={this.state.valor}
+                minimumTrackTintColor="blue"
+                maximumTrackTintColor="red"
+              />
+              <Text>
+                Seu limite vai ser:R$ {this.state.valor.toFixed(2)} reais{" "}
+              </Text>
+            </View>
+            <View style={styles.fim}>
+              <Switch
+                value={this.state.estudante}
+                onValueChange={(estudante) =>
+                  this.setState({ estudante: estudante })
+                }
+                thumbColor="blue"
+              />
+              <Text>Estudante</Text>
+              <View style={styles.render}>
+                <Text>
+                  {this.state.estudante ? "Você selecionou estudante" : ""}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.botao}>
+              <TouchableOpacity onPress={this.enviar}>
+                <View>
+                  <Text>Prosseguir</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       </View>
     );
   }
@@ -184,5 +196,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 25,
     borderColor: "orange",
+  },
+  pronto: {
+    flex: 1,
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    borderRadius: 10,
+    borderColor: "orange",
+    borderWidth: 10,
+    backgroundColor: "#FFFAFA",
+  },
+  editor: {
+    fontStyle: "italic",
+    fontSize: 15,
+    color: "black",
+    textAlign: "center",
+    textShadowColor: "orange",
   },
 });
